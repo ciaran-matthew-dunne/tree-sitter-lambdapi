@@ -1,47 +1,38 @@
-// grammar.js
-// Tree-sitter grammar for LambdaPi language
-// Generated from EBNF-like specification provided by user
-
 module.exports = grammar({
   name: "lambdapi",
 
-  extras: ($) => [
-    /\s/, // whitespace
-    $.comment, // comments
-  ],
+  extras: ($) => [/\s/, $.comment],
 
   rules: {
-    // Comments
-    comment: ($) => token(choice(seq("//", /.*/), seq("/*", /[\s\S]*?/, "*/"))),
-
     source_file: ($) => repeat($._command),
 
-    // Identifiers
-    UID: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
-    QID: ($) => seq(optional(seq($.UID, repeat1(seq(".", $.UID)))), $.UID),
+    comment: ($) =>
+      token(choice(seq("//", /[^\n]*/), seq("/*", /[\s\S]*?/, "*/"))),
 
-    // Keywords and symbols
+    uid: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
+    integer: ($) => /\d+/,
+    float: ($) => /\d+\.\d+/,
+    string: ($) => token(seq('"', /([^"\\]|\\.)*/, '"')),
+
+    qid: ($) => seq(repeat1(seq($.uid, ".")), $.uid),
+    qid_expl: ($) => seq("@", choice($.uid, $.qid)),
+    qid_or_rule: ($) => choice($.qid, "unif_rule", "coerce_rule"),
+
     switch: ($) => choice("on", "off"),
     side: ($) => choice("left", "right"),
     assert_kw: ($) => choice("assert", "assertnot"),
 
-    // Top-level rules with explicit EOF
-    term_alone: ($) => seq($.term, $.EOS),
-    qid_alone: ($) => seq($.qid, $.EOS),
-    search_query_alone: ($) => seq($.search_query, $.EOS),
-
-    // commands
     _command: ($) =>
       choice(
         seq("opaque", $.qid, ";"),
         seq("require", "open", repeat($.path), ";"),
         seq("require", repeat($.path), ";"),
-        seq("require", $.path, "as", $.UID, ";"),
+        seq("require", $.path, "as", $.uid, ";"),
         seq("open", repeat($.path), ";"),
         seq(
           repeat($.modifier),
           "symbol",
-          $.UID,
+          $.uid,
           repeat($.param_list),
           ":",
           $.term,
@@ -51,7 +42,7 @@ module.exports = grammar({
         seq(
           repeat($.modifier),
           "symbol",
-          $.UID,
+          $.uid,
           repeat($.param_list),
           optional(seq(":", $.term)),
           "≔",
@@ -74,26 +65,8 @@ module.exports = grammar({
         seq($.query, ";"),
       ),
 
-    query: ($) =>
-      choice(
-        seq($.assert_kw, repeat($.param_list), "⊢", $.term, ":", $.term),
-        seq($.assert_kw, repeat($.param_list), "⊢", $.term, "≡", $.term),
-        seq("compute", $.term),
-        seq("print", optional($.qid_or_rule)),
-        "proofterm",
-        seq("debug", choice("+", "-"), token(/.+/)),
-        seq("flag", $.string, $.switch),
-        seq("prover", $.string),
-        seq("prover_timeout", $.integer),
-        seq("verbose", $.integer),
-        seq("type", $.term),
-        seq("search", $.string),
-      ),
-
-    qid_or_rule: ($) => choice($.qid, "unif_rule", "coerce_rule"),
-
-    path: ($) => choice($.UID, $.QID),
-
+    path: ($) => choice($.uid, $.qid),
+    exposition: ($) => choice("private", "protected"),
     modifier: ($) =>
       choice(
         seq(optional($.side), "associative"),
@@ -105,26 +78,16 @@ module.exports = grammar({
         $.exposition,
       ),
 
-    exposition: ($) => choice("private", "protected"),
-
-    uid: ($) => $.UID,
-
     param_list: ($) =>
       choice(
         $.param,
         seq("(", repeat1($.param), ":", $.term, ")"),
         seq("[", repeat1($.param), optional(seq(":", $.term)), "]"),
       ),
-
-    param: ($) => choice($.UID, "_"),
+    param: ($) => choice($.uid, "_"),
 
     term: ($) =>
-      choice(
-        $.bterm,
-        $.saterm,
-        seq($.saterm, $.bterm),
-        seq($.saterm, "→", $.term),
-      ),
+      choice($.bterm, prec.right(seq($.saterm, "→", $.term)), $.saterm),
 
     bterm: ($) =>
       choice(
@@ -133,7 +96,7 @@ module.exports = grammar({
         seq("λ", $.binder),
         seq(
           "let",
-          $.UID,
+          $.uid,
           repeat($.param_list),
           optional(seq(":", $.term)),
           "≔",
@@ -143,15 +106,22 @@ module.exports = grammar({
         ),
       ),
 
-    saterm: ($) => repeat1($.aterm),
+    binder: ($) =>
+      choice(
+        seq(repeat1($.param_list), ",", $.term),
+        seq($.param, ":", $.term, ",", $.term),
+      ),
 
+    term_id: ($) => choice($.qid, $.qid_expl),
+
+    saterm: ($) => prec.left(seq($.aterm, repeat($.aterm))),
     aterm: ($) =>
       choice(
         $.term_id,
         "_",
         "TYPE",
-        seq("?", $.UID, optional($.env)),
-        seq("$", $.UID, optional($.env)),
+        seq("?", $.uid, optional($.env)),
+        seq("$", $.uid, optional($.env)),
         seq("(", $.term, ")"),
         seq("[", $.term, "]"),
         $.integer,
@@ -161,28 +131,12 @@ module.exports = grammar({
     env: ($) =>
       seq(".", "[", optional(seq($.term, repeat(seq(";", $.term)))), "]"),
 
-    term_id: ($) => choice($.qid, $.qid_expl),
-
-    qid: ($) => choice($.UID, $.QID),
-    qid_expl: ($) => seq("@", choice($.UID, $.QID)),
-
-    binder: ($) =>
-      choice(
-        seq(repeat1($.param_list), ",", $.term),
-        seq($.param, ":", $.term, ",", $.term),
-      ),
-
     term_proof: ($) => choice($.term, $.proof, seq($.term, $.proof)),
-
-    proof: ($) => seq("begin", repeat1($.subproof), $.proof_end),
-
+    proof: ($) => seq("begin", optional($.proof_steps), $.proof_end),
     subproof: ($) => seq("{", optional($.proof_steps), "}"),
-
     proof_steps: ($) =>
       seq($.proof_step, repeat(seq(";", $.proof_step)), optional(";")),
-
     proof_step: ($) => seq($.tactic, repeat($.subproof)),
-
     proof_end: ($) => choice("abort", "admitted", "end"),
 
     tactic: ($) =>
@@ -193,16 +147,16 @@ module.exports = grammar({
         seq("assume", repeat1($.param)),
         seq("eval", $.term),
         "fail",
-        seq("generalize", $.UID),
-        seq("have", $.UID, ":", $.term),
+        seq("generalize", $.uid),
+        seq("have", $.uid, ":", $.term),
         "induction",
         seq("orelse", $.tactic, $.tactic),
         seq("refine", $.term),
         "reflexivity",
-        seq("remove", repeat1($.UID)),
+        seq("remove", repeat1($.uid)),
         seq("repeat", $.tactic),
         seq("rewrite", optional($.side), optional($.rw_patt_spec), $.term),
-        seq("set", $.UID, "≔", $.term),
+        seq("set", $.uid, "≔", $.term),
         "simplify",
         seq("simplify", $.qid),
         seq("simplify", "rule", "off"),
@@ -216,38 +170,27 @@ module.exports = grammar({
       choice(
         $.term,
         seq("in", $.term),
-        seq("in", $.UID, "in", $.term),
+        seq("in", $.uid, "in", $.term),
         seq($.term, "in", $.term, optional(seq("in", $.term))),
-        seq($.term, "as", $.UID, "in", $.term),
+        seq($.term, "as", $.uid, "in", $.term),
       ),
-
     rw_patt_spec: ($) => seq(".", "[", $.rw_patt, "]"),
 
     inductive: ($) =>
       seq(
-        $.UID,
+        $.uid,
         repeat($.param_list),
         ":",
         $.term,
         "≔",
         optional("|"),
-        $.constructor,
-        repeat(seq("|", $.constructor)),
+        optional(seq($.constructor, repeat(seq("|", $.constructor)))),
       ),
-
-    constructor: ($) => seq($.UID, repeat($.param_list), ":", $.term),
+    constructor: ($) => seq($.uid, repeat($.param_list), ":", $.term),
 
     rule: ($) => seq($.term, "↪", $.term),
-
     unif_rule: ($) =>
-      seq(
-        $.equation,
-        "↪",
-        "[",
-        seq($.equation, repeat(seq(";", $.equation))),
-        "]",
-      ),
-
+      seq($.equation, "↪", "[", $.equation, repeat(seq(";", $.equation)), "]"),
     equation: ($) => seq($.term, "≡", $.term),
 
     notation: ($) =>
@@ -257,33 +200,36 @@ module.exports = grammar({
         seq("prefix", $.float_or_int),
         "quantifier",
       ),
-
     float_or_int: ($) => choice($.float, $.integer),
 
-    float: ($) => /[0-9]+\.[0-9]*/,
-    integer: ($) => /[0-9]+/,
-    string: ($) => /"(?:\\.|[^"\\])*"/,
-
-    maybe_generalize: ($) => optional("generalize"),
-    where: ($) => seq($.UID, $.maybe_generalize),
+    query: ($) =>
+      choice(
+        seq($.assert_kw, repeat($.param_list), "⊢", $.term, ":", $.term),
+        seq($.assert_kw, repeat($.param_list), "⊢", $.term, "≡", $.term),
+        seq("compute", $.term),
+        seq("print", optional($.qid_or_rule)),
+        "proofterm",
+        seq("debug", token(/[+-].+/)),
+        seq("flag", $.string, $.switch),
+        seq("prover", $.string),
+        seq("prover_timeout", $.integer),
+        seq("verbose", $.integer),
+        seq("type", $.term),
+        seq("search", $.string),
+      ),
 
     asearch_query: ($) =>
       choice(
-        seq("type", $.where, $.aterm),
-        seq("rule", $.where, $.aterm),
-        seq($.UID, $.where, $.aterm),
+        seq(choice("type", "rule", $.uid), $.where, $.aterm),
         seq("(", $.search_query, ")"),
       ),
-
     csearch_query: ($) =>
       seq($.asearch_query, repeat(seq(",", $.asearch_query))),
     ssearch_query: ($) =>
       seq($.csearch_query, repeat(seq(";", $.csearch_query))),
-
     search_query: ($) =>
-      choice($.ssearch_query, seq($.search_query, "|", $.qid)),
+      choice($.ssearch_query, prec.left(seq($.search_query, "|", $.qid))),
 
-    // End-of-file marker
-    EOS: ($) => token(choice("\\n", "\\r\\n", "$")),
+    where: ($) => seq($.uid, optional("generalize")),
   },
 });
