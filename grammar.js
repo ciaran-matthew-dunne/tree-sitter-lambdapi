@@ -19,6 +19,7 @@ module.exports = grammar({
 
     // Identifiers
     uid: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
+    esc_uid: ($) => seq("{|", $.uid, "|}"),
     qid: ($) => seq($.uid, repeat(seq(".", $.uid))),
 
     // Paths
