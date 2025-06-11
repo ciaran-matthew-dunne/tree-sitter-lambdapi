@@ -167,7 +167,8 @@ module.exports = grammar({
     constructor: ($) => seq($.uid, repeat($.param_list), ":", $.term),
 
     // Rules
-    rule: ($) => seq($.term, "↪", $.term),
+    clause: ($) => seq($.term, "↪", $.term),
+    rule: ($) => seq($.clause, repeat(seq("with", $.clause))),
     unif_rule: ($) => seq($.equation, "↪", "[", sepBy1(";", $.equation), "]"),
     equation: ($) => seq($.term, "≡", $.term),
 
@@ -235,7 +236,7 @@ module.exports = grammar({
           repeat(seq("with", $.inductive)),
           ";",
         ),
-        seq("rule", $.rule, repeat(seq("with", $.rule)), ";"),
+        seq("rule", $.rule, ";"),
         seq("builtin", $.string, "≔", $.qid, ";"),
         seq("coerce_rule", $.rule, ";"),
         seq("unif_rule", $.unif_rule, ";"),
