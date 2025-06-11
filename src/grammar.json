@@ -1383,7 +1383,7 @@
         }
       ]
     },
-    "rule": {
+    "clause": {
       "type": "SEQ",
       "members": [
         {
@@ -1397,6 +1397,31 @@
         {
           "type": "SYMBOL",
           "name": "term"
+        }
+      ]
+    },
+    "rule": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "clause"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "with"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "clause"
+              }
+            ]
+          }
         }
       ]
     },
@@ -2053,22 +2078,6 @@
             {
               "type": "SYMBOL",
               "name": "rule"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "STRING",
-                    "value": "with"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "rule"
-                  }
-                ]
-              }
             },
             {
               "type": "STRING",

@@ -94,6 +94,21 @@
     }
   },
   {
+    "type": "clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "constructor",
     "named": true,
     "fields": {},
@@ -443,7 +458,7 @@
       "required": true,
       "types": [
         {
-          "type": "term",
+          "type": "clause",
           "named": true
         }
       ]
