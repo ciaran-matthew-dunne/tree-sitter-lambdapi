@@ -18,7 +18,7 @@ module.exports = grammar({
     comment: ($) => token(choice(seq("//", /.*/), seq("/*", /[\s\S]*?/, "*/"))),
 
     // Identifiers
-    uid: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
+    uid: ($) => /[$A-Za-z_][A-Za-z0-9_]*/,
     esc_uid: ($) => seq("{|", $.uid, "|}"),
     qid: ($) => seq($.uid, repeat(seq(".", $.uid))),
 
