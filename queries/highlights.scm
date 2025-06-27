@@ -1,176 +1,169 @@
-; Tree-sitter highlighting queries for LambdaPi
+; Keywords
+[
+  "abort"
+  "admit"
+  "admitted"
+  "apply"
+  "as"
+  "assert"
+  "assertnot"
+  "associative"
+  "assume"
+  "begin"
+  "builtin"
+  "coerce_rule"
+  "commutative"
+  "compute"
+  "constant"
+  "debug"
+  "end"
+  "eval"
+  "fail"
+  "flag"
+  "generalize"
+  "have"
+  "in"
+  "induction"
+  "inductive"
+  "infix"
+  "injective"
+  "let"
+  "notation"
+  "opaque"
+  "open"
+  "orelse"
+  "postfix"
+  "prefix"
+  "print"
+  "private"
+  "proofterm"
+  "protected"
+  "prover"
+  "prover_timeout"
+  "quantifier"
+  "refine"
+  "reflexivity"
+  "remove"
+  "repeat"
+  "require"
+  "rewrite"
+  "rule"
+  "search"
+  "sequential"
+  "set"
+  "simplify"
+  "solve"
+  "symbol"
+  "symmetry"
+  "try"
+  "type"
+  "TYPE"
+  "unif_rule"
+  "verbose"
+  "why3"
+  "with"
+] @keyword
 
-; Comments
-(comment) @comment
+; Operators
+[
+  "→"
+  "->"
+  "≔"
+  ":="
+  "≡"
+  "=="
+  "↪"
+  "|->"
+  "⊢"
+  "|-"
+  ":"
+  ","
+  ";"
+  "."
+  "|"
+  "_"
+] @operator
 
-; Keywords and control structures
-"require" @keyword.import
-"open" @keyword.import
-"as" @keyword.import
-"opaque" @keyword
-"symbol" @keyword.function
-"inductive" @keyword.type
-"with" @keyword
-"rule" @keyword
-"builtin" @keyword
-"coerce_rule" @keyword
-"unif_rule" @keyword
-"notation" @keyword
+; Special symbols
+[
+  "λ"
+  "\\"
+  "Π"
+  "forall"
+] @keyword.function
 
-; Type-related keywords
-"TYPE" @type.builtin
-
-; Lambda calculus and type theory constructs
-"λ" @keyword.function
-"Π" @keyword.operator
-"let" @keyword
-"in" @keyword
-
-; Proof keywords
-"begin" @keyword
-"end" @keyword
-"abort" @keyword
-"admitted" @keyword
-
-; Tactic keywords
-"admit" @keyword
-"apply" @keyword
-"assume" @keyword
-"eval" @keyword
-"fail" @keyword
-"generalize" @keyword
-"have" @keyword
-"induction" @keyword
-"orelse" @keyword
-"refine" @keyword
-"reflexivity" @keyword
-"remove" @keyword
-"repeat" @keyword
-"rewrite" @keyword
-"set" @keyword
-"simplify" @keyword
-"solve" @keyword
-"symmetry" @keyword
-"try" @keyword
-"why3" @keyword
-"debug" @keyword
-
-; Query keywords
-"assert" @keyword
-"assertnot" @keyword
-"compute" @keyword
-"print" @keyword
-"proofterm" @keyword
-"flag" @keyword
-"prover" @keyword
-"prover_timeout" @keyword
-"verbose" @keyword
-"type" @keyword
-"search" @keyword
-
-; Modifiers
-"left" @attribute
-"right" @attribute
-"associative" @attribute
-"commutative" @attribute
-"constant" @attribute
-"injective" @attribute
-"opaque" @attribute
-"sequential" @attribute
-"private" @attribute
-"protected" @attribute
-
-; Notation types
-"infix" @keyword
-"postfix" @keyword
-"prefix" @keyword
-"quantifier" @keyword
-
-; Switches
-"on" @constant.builtin
-"off" @constant.builtin
-
-; Operators and symbols
-":" @punctuation.delimiter
-"≔" @operator
-"→" @operator
-"↪" @operator
-"≡" @operator
-"⊢" @operator
-"|" @punctuation.delimiter
-";" @punctuation.delimiter
-"," @punctuation.delimiter
-"." @punctuation.delimiter
-"`" @punctuation.special
-
-; Brackets and delimiters
-"(" @punctuation.bracket
-")" @punctuation.bracket
-"[" @punctuation.bracket
-"]" @punctuation.bracket
-"{" @punctuation.bracket
-"}" @punctuation.bracket
-"{|" @punctuation.bracket
-"|}" @punctuation.bracket
+; Delimiters
+[
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+] @punctuation.bracket
 
 ; Identifiers
 (uid) @variable
 (param) @variable.parameter
-(esc_uid) @variable
+(regular_id) @variable
+(escaped_id) @variable
 
 ; Qualified identifiers
 (qid) @variable
-(qid_expl) @variable.special
-"@" @punctuation.special
+(qid_expl) @variable
+(qualified_id) @variable
 
-; Term identifiers in specific contexts
-(term_id) @variable
+; Special identifiers
+(meta_var) @variable.special
+(pattern_var) @variable.special
 
-; Constructor names
-(constructor (uid) @constructor)
+; Type annotations
+(param_list
+  ":" @punctuation.delimiter
+  (term) @type)
 
-; Inductive type names
-(inductive (uid) @type)
+(assert_query
+  ":" @punctuation.delimiter
+  (term) @type)
 
-; Symbol declarations
-((symbol (uid) @function.definition))
+(have
+  ":" @punctuation.delimiter
+  (term) @type)
 
-; Parameters in specific contexts
-(param_list (param) @variable.parameter)
+; Function/symbol definitions
+(symbol_command
+  "symbol" @keyword
+  (uid) @function)
 
-; Wildcard
-"_" @variable.special
+(constructor
+  (uid) @constructor)
 
-; Meta-variables
-(aterm "$" @punctuation.special (uid) @variable.special)
-(aterm "?" @punctuation.special (uid) @variable.special)
+(inductive_def
+  (uid) @type.definition)
+
+; Rules
+(rule
+  (term) @function.special
+  "↪"
+  (term) @function.special)
 
 ; Literals
-(integer) @number
+(int) @number
+(float) @number.float
 (string) @string
-(float_or_int) @number
 
-; Path components
-(path) @namespace
+; Comments
+(comment) @comment
 
-; Module names in require statements
-((require (path) @module))
-((require (uid) @module))
+; Proof tactics
+(tactic) @keyword.function
 
-; Escaped identifiers
-(esc_uid "{|" @punctuation.bracket (uid) @variable "|}" @punctuation.bracket)
+; Builtin references
+(builtin_command
+  "builtin" @keyword
+  (string) @string.special
+  "≔"
+  (qid) @function.builtin)
 
-; Special highlighting for rule patterns
-(rw_patt "in" @keyword)
-(rw_patt "as" @keyword)
-
-; Environment brackets
-(env "." @punctuation.delimiter "[" @punctuation.bracket "]" @punctuation.bracket)
-
-; Proof environment
-(proof) @keyword
-(subproof "{" @punctuation.bracket "}" @punctuation.bracket)
-(proof_end) @keyword
-
-; Error nodes
+; Error highlighting for incomplete constructs
 (ERROR) @error
