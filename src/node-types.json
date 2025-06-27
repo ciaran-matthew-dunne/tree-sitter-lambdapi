@@ -1,23 +1,45 @@
 [
   {
-    "type": "assert",
+    "type": "assert_query",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "param_list",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "aterm",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "env",
+          "type": "explicit_term",
           "named": true
         },
         {
-          "type": "integer",
+          "type": "int",
+          "named": true
+        },
+        {
+          "type": "meta_var",
+          "named": true
+        },
+        {
+          "type": "pattern_var",
           "named": true
         },
         {
@@ -25,15 +47,11 @@
           "named": true
         },
         {
-          "type": "term",
-          "named": true
-        },
-        {
           "type": "term_id",
           "named": true
         },
         {
-          "type": "uid",
+          "type": "wrapped_term",
           "named": true
         }
       ]
@@ -75,30 +93,120 @@
           "named": true
         },
         {
-          "type": "param_list",
-          "named": true
-        },
-        {
-          "type": "term",
+          "type": "let_term",
           "named": true
         },
         {
           "type": "term_id",
-          "named": true
-        },
-        {
-          "type": "uid",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "clause",
+    "type": "builtin_command",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "qid",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "coerce_rule_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "rule",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "builtin_command",
+          "named": true
+        },
+        {
+          "type": "coerce_rule_command",
+          "named": true
+        },
+        {
+          "type": "inductive_command",
+          "named": true
+        },
+        {
+          "type": "notation_command",
+          "named": true
+        },
+        {
+          "type": "opaque_command",
+          "named": true
+        },
+        {
+          "type": "open_command",
+          "named": true
+        },
+        {
+          "type": "query_command",
+          "named": true
+        },
+        {
+          "type": "require_as_command",
+          "named": true
+        },
+        {
+          "type": "require_command",
+          "named": true
+        },
+        {
+          "type": "rule_command",
+          "named": true
+        },
+        {
+          "type": "symbol_command",
+          "named": true
+        },
+        {
+          "type": "unif_rule_command",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "comment",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "compute_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
       "required": true,
       "types": [
         {
@@ -132,6 +240,11 @@
     }
   },
   {
+    "type": "debug_query",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "env",
     "named": true,
     "fields": {},
@@ -162,27 +275,103 @@
     }
   },
   {
-    "type": "exposition",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "float_or_int",
+    "type": "explicit_term",
     "named": true,
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "integer",
+          "type": "term",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "inductive",
+    "type": "exposition",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "flag_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "id_part",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "escaped_id",
+          "named": true
+        },
+        {
+          "type": "regular_id",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "escaped_id",
+          "named": true
+        },
+        {
+          "type": "regular_id",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "inductive_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "exposition",
+          "named": true
+        },
+        {
+          "type": "inductive_def",
+          "named": true
+        },
+        {
+          "type": "param_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "inductive_def",
     "named": true,
     "fields": {},
     "children": {
@@ -203,6 +392,48 @@
         },
         {
           "type": "uid",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "let_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "param_list",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        },
+        {
+          "type": "uid",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "meta_var",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "env",
+          "named": true
+        },
+        {
+          "type": "int",
           "named": true
         }
       ]
@@ -236,11 +467,60 @@
       "required": false,
       "types": [
         {
-          "type": "float_or_int",
+          "type": "priority",
           "named": true
         },
         {
           "type": "side",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "notation_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "notation",
+          "named": true
+        },
+        {
+          "type": "qid",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "opaque_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "qid",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "open_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "path",
           "named": true
         }
       ]
@@ -289,11 +569,64 @@
       "required": true,
       "types": [
         {
-          "type": "qid",
+          "type": "qualified_id",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "pattern_var",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "env",
           "named": true
         },
         {
-          "type": "uid",
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "int",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "print_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "qid_or_rule",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "priority",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "float",
+          "named": true
+        },
+        {
+          "type": "int",
           "named": true
         }
       ]
@@ -309,6 +642,10 @@
       "types": [
         {
           "type": "proof_end",
+          "named": true
+        },
+        {
+          "type": "proof_steps",
           "named": true
         },
         {
@@ -353,9 +690,35 @@
         {
           "type": "proof_step",
           "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "prover_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
         {
-          "type": "proof_steps",
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "prover_timeout_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "int",
           "named": true
         }
       ]
@@ -366,11 +729,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "uid",
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_id",
           "named": true
         }
       ]
@@ -385,11 +752,11 @@
       "required": true,
       "types": [
         {
-          "type": "qid",
+          "type": "identifier",
           "named": true
         },
         {
-          "type": "uid",
+          "type": "qualified_id",
           "named": true
         }
       ]
@@ -411,35 +778,138 @@
     }
   },
   {
-    "type": "query",
+    "type": "qualified_id",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "assert",
+          "type": "id_part",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "assert_query",
           "named": true
         },
         {
-          "type": "integer",
+          "type": "compute_query",
           "named": true
         },
         {
-          "type": "param_list",
+          "type": "debug_query",
           "named": true
         },
         {
-          "type": "qid_or_rule",
+          "type": "flag_query",
           "named": true
         },
         {
-          "type": "string",
+          "type": "print_query",
           "named": true
         },
         {
-          "type": "switch",
+          "type": "proofterm_query",
+          "named": true
+        },
+        {
+          "type": "prover_query",
+          "named": true
+        },
+        {
+          "type": "prover_timeout_query",
+          "named": true
+        },
+        {
+          "type": "search_query",
+          "named": true
+        },
+        {
+          "type": "type_query",
+          "named": true
+        },
+        {
+          "type": "verbose_query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "query_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "require_as_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "path",
+          "named": true
+        },
+        {
+          "type": "uid",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "require_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "path",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rewrite_tactic",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "rw_patt_spec",
+          "named": true
+        },
+        {
+          "type": "side",
           "named": true
         },
         {
@@ -458,7 +928,22 @@
       "required": true,
       "types": [
         {
-          "type": "clause",
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "rule_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "rule",
           "named": true
         }
       ]
@@ -509,6 +994,25 @@
         {
           "type": "aterm",
           "named": true
+        },
+        {
+          "type": "saterm",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "search_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
         }
       ]
     }
@@ -517,6 +1021,21 @@
     "type": "side",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "simplify_tactic",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "qid",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "source_file",
@@ -528,63 +1047,7 @@
       "required": false,
       "types": [
         {
-          "type": "exposition",
-          "named": true
-        },
-        {
-          "type": "inductive",
-          "named": true
-        },
-        {
-          "type": "modifier",
-          "named": true
-        },
-        {
-          "type": "notation",
-          "named": true
-        },
-        {
-          "type": "param_list",
-          "named": true
-        },
-        {
-          "type": "path",
-          "named": true
-        },
-        {
-          "type": "proof",
-          "named": true
-        },
-        {
-          "type": "qid",
-          "named": true
-        },
-        {
-          "type": "query",
-          "named": true
-        },
-        {
-          "type": "rule",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "term",
-          "named": true
-        },
-        {
-          "type": "term_proof",
-          "named": true
-        },
-        {
-          "type": "uid",
-          "named": true
-        },
-        {
-          "type": "unif_rule",
+          "type": "command",
           "named": true
         }
       ]
@@ -606,9 +1069,39 @@
     }
   },
   {
-    "type": "switch",
+    "type": "symbol_command",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "modifier",
+          "named": true
+        },
+        {
+          "type": "param_list",
+          "named": true
+        },
+        {
+          "type": "proof",
+          "named": true
+        },
+        {
+          "type": "term",
+          "named": true
+        },
+        {
+          "type": "term_proof",
+          "named": true
+        },
+        {
+          "type": "uid",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "tactic",
@@ -623,19 +1116,15 @@
           "named": true
         },
         {
-          "type": "qid",
-          "named": true
-        },
-        {
           "type": "query",
           "named": true
         },
         {
-          "type": "rw_patt_spec",
+          "type": "rewrite_tactic",
           "named": true
         },
         {
-          "type": "side",
+          "type": "simplify_tactic",
           "named": true
         },
         {
@@ -719,6 +1208,36 @@
     }
   },
   {
+    "type": "type_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "term",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "uid",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "unif_rule",
     "named": true,
     "fields": {},
@@ -728,6 +1247,51 @@
       "types": [
         {
           "type": "equation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unif_rule_command",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "unif_rule",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "verbose_query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "int",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "wrapped_term",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "term",
           "named": true
         }
       ]
@@ -759,6 +1323,18 @@
   },
   {
     "type": ".",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": "/*",
+    "named": false
+  },
+  {
+    "type": "//",
     "named": false
   },
   {
@@ -846,11 +1422,6 @@
     "named": false
   },
   {
-    "type": "comment",
-    "named": true,
-    "extra": true
-  },
-  {
     "type": "commutative",
     "named": false
   },
@@ -863,12 +1434,12 @@
     "named": false
   },
   {
-    "type": "debug",
+    "type": "end",
     "named": false
   },
   {
-    "type": "end",
-    "named": false
+    "type": "escaped_id",
+    "named": true
   },
   {
     "type": "eval",
@@ -881,6 +1452,10 @@
   {
     "type": "flag",
     "named": false
+  },
+  {
+    "type": "float",
+    "named": true
   },
   {
     "type": "generalize",
@@ -911,7 +1486,7 @@
     "named": false
   },
   {
-    "type": "integer",
+    "type": "int",
     "named": true
   },
   {
@@ -963,8 +1538,8 @@
     "named": false
   },
   {
-    "type": "proofterm",
-    "named": false
+    "type": "proofterm_query",
+    "named": true
   },
   {
     "type": "protected",
@@ -989,6 +1564,10 @@
   {
     "type": "reflexivity",
     "named": false
+  },
+  {
+    "type": "regular_id",
+    "named": true
   },
   {
     "type": "remove",
@@ -1053,10 +1632,6 @@
   {
     "type": "type",
     "named": false
-  },
-  {
-    "type": "uid",
-    "named": true
   },
   {
     "type": "unif_rule",
