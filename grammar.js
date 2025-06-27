@@ -3,12 +3,6 @@ module.exports = grammar({
 
   extras: ($) => [$.comment, /\s/],
 
-  conflicts: ($) => [
-    [$.term, $.saterm],
-    [$.aterm, $.term_id],
-    [$.param, $.uid],
-  ],
-
   rules: {
     source_file: ($) => repeat($.command),
 
@@ -50,7 +44,7 @@ module.exports = grammar({
         repeat($.param_list),
         choice(
           seq(":", $.term, optional($.proof), ";"),
-          seq(optional(seq(":", $.term)), "≔", $.term_proof, ";"),
+          seq(optional(seq(":", $.term)), $.assign, $.term_proof, ";"),
         ),
       ),
 
@@ -69,7 +63,7 @@ module.exports = grammar({
         repeat($.param_list),
         ":",
         $.term,
-        "≔",
+        $.assign,
         optional("|"),
         sep($.constructor, "|"),
       ),
@@ -78,17 +72,18 @@ module.exports = grammar({
 
     rule_command: ($) => seq("rule", sep1($.rule, "with"), ";"),
 
-    rule: ($) => seq($.term, "↪", $.term),
+    rule: ($) => seq($.term, $.hook_arrow, $.term),
 
-    builtin_command: ($) => seq("builtin", $.string, "≔", $.qid, ";"),
+    builtin_command: ($) => seq("builtin", $.string, $.assign, $.qid, ";"),
 
     coerce_rule_command: ($) => seq("coerce_rule", $.rule, ";"),
 
     unif_rule_command: ($) => seq("unif_rule", $.unif_rule, ";"),
 
-    unif_rule: ($) => seq($.equation, "↪", "[", sep1($.equation, ";"), "]"),
+    unif_rule: ($) =>
+      seq($.equation, $.hook_arrow, "[", sep1($.equation, ";"), "]"),
 
-    equation: ($) => seq($.term, "≡", $.term),
+    equation: ($) => seq($.term, $.equiv, $.term),
 
     notation_command: ($) => seq("notation", $.qid, $.notation, ";"),
 
@@ -124,9 +119,9 @@ module.exports = grammar({
       seq(
         choice("assert", "assertnot"),
         repeat($.param_list),
-        "⊢",
+        $.turnstile,
         $.term,
-        choice(seq(":", $.term), seq("≡", $.term)),
+        choice(seq(":", $.term), seq($.equiv, $.term)),
       ),
 
     compute_query: ($) => seq("compute", $.term),
@@ -172,14 +167,14 @@ module.exports = grammar({
         $.bterm,
         $.saterm,
         prec.left(1, seq($.saterm, $.bterm)),
-        prec.right(2, seq($.saterm, "→", $.term)),
+        prec.right(2, seq($.saterm, $.arrow, $.term)),
       ),
 
     bterm: ($) =>
       choice(
         seq("`", $.term_id, $.binder),
-        seq("Π", $.binder),
-        seq("λ", $.binder),
+        seq($.pi, $.binder),
+        seq($.lambda, $.binder),
         $.let_term,
       ),
 
@@ -189,13 +184,13 @@ module.exports = grammar({
         $.uid,
         repeat($.param_list),
         optional(seq(":", $.term)),
-        "≔",
+        $.assign,
         $.term,
         "in",
         $.term,
       ),
 
-    saterm: ($) => prec.left(seq($.saterm, $.aterm)),
+    saterm: ($) => prec.left(choice($.aterm, seq($.saterm, $.aterm))),
 
     aterm: ($) =>
       choice(
@@ -267,7 +262,7 @@ module.exports = grammar({
         seq("remove", repeat1($.uid)),
         seq("repeat", $.tactic),
         $.rewrite_tactic,
-        seq("set", $.uid, "≔", $.term),
+        seq("set", $.uid, $.assign, $.term),
         $.simplify_tactic,
         "solve",
         "symmetry",

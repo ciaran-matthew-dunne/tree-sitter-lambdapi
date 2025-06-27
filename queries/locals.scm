@@ -6,23 +6,29 @@
 
 ; Variable definitions in parameters
 (param_list
-  (param) @definition.variable)
+  (param
+    (uid) @definition.parameter))
 
 ; Let bindings
 (let_term
   (uid) @definition.variable)
 
 ; Pattern variables in tactics
-(assume
-  (param) @definition.variable)
+(tactic
+  "assume"
+  (param
+    (uid) @definition.variable))
 
-(have
+(tactic
+  "have"
   (uid) @definition.variable)
 
-(generalize
+(tactic
+  "generalize"
   (uid) @definition.variable)
 
-(set
+(tactic
+  "set"
   (uid) @definition.variable)
 
 ; Inductive type definitions
@@ -37,10 +43,28 @@
 (qid) @reference.variable
 (qid_expl) @reference.variable
 
+; Special references
+(term_id) @reference.variable
+(meta_var) @reference.special
+(pattern_var) @reference.special
+
+; Parameter references
+(param
+  (uid) @reference.parameter)
+
 ; Scopes
-(symbol_command) @scope
-(let_term) @scope
-(proof) @scope
-(subproof) @scope
-(binder) @scope
-(param_list) @scope
+[
+  (source_file)
+  (symbol_command)
+  (let_term)
+  (proof)
+  (subproof)
+  (binder)
+  (param_list)
+  (inductive_command)
+  (rule_command)
+] @scope
+
+; Scope boundaries for let bindings
+(let_term
+  "in" @scope.boundary)

@@ -273,8 +273,8 @@
                   ]
                 },
                 {
-                  "type": "STRING",
-                  "value": "≔"
+                  "type": "SYMBOL",
+                  "name": "assign"
                 },
                 {
                   "type": "SYMBOL",
@@ -370,8 +370,8 @@
           "name": "term"
         },
         {
-          "type": "STRING",
-          "value": "≔"
+          "type": "SYMBOL",
+          "name": "assign"
         },
         {
           "type": "CHOICE",
@@ -490,8 +490,8 @@
           "name": "term"
         },
         {
-          "type": "STRING",
-          "value": "↪"
+          "type": "SYMBOL",
+          "name": "hook_arrow"
         },
         {
           "type": "SYMBOL",
@@ -511,8 +511,8 @@
           "name": "string"
         },
         {
-          "type": "STRING",
-          "value": "≔"
+          "type": "SYMBOL",
+          "name": "assign"
         },
         {
           "type": "SYMBOL",
@@ -566,8 +566,8 @@
           "name": "equation"
         },
         {
-          "type": "STRING",
-          "value": "↪"
+          "type": "SYMBOL",
+          "name": "hook_arrow"
         },
         {
           "type": "STRING",
@@ -612,8 +612,8 @@
           "name": "term"
         },
         {
-          "type": "STRING",
-          "value": "≡"
+          "type": "SYMBOL",
+          "name": "equiv"
         },
         {
           "type": "SYMBOL",
@@ -814,8 +814,8 @@
           }
         },
         {
-          "type": "STRING",
-          "value": "⊢"
+          "type": "SYMBOL",
+          "name": "turnstile"
         },
         {
           "type": "SYMBOL",
@@ -841,8 +841,8 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "≡"
+                  "type": "SYMBOL",
+                  "name": "equiv"
                 },
                 {
                   "type": "SYMBOL",
@@ -1215,8 +1215,8 @@
                 "name": "saterm"
               },
               {
-                "type": "STRING",
-                "value": "→"
+                "type": "SYMBOL",
+                "name": "arrow"
               },
               {
                 "type": "SYMBOL",
@@ -1251,8 +1251,8 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "STRING",
-              "value": "Π"
+              "type": "SYMBOL",
+              "name": "pi"
             },
             {
               "type": "SYMBOL",
@@ -1264,8 +1264,8 @@
           "type": "SEQ",
           "members": [
             {
-              "type": "STRING",
-              "value": "λ"
+              "type": "SYMBOL",
+              "name": "lambda"
             },
             {
               "type": "SYMBOL",
@@ -1319,8 +1319,8 @@
           ]
         },
         {
-          "type": "STRING",
-          "value": "≔"
+          "type": "SYMBOL",
+          "name": "assign"
         },
         {
           "type": "SYMBOL",
@@ -1340,15 +1340,24 @@
       "type": "PREC_LEFT",
       "value": 0,
       "content": {
-        "type": "SEQ",
+        "type": "CHOICE",
         "members": [
           {
             "type": "SYMBOL",
-            "name": "saterm"
+            "name": "aterm"
           },
           {
-            "type": "SYMBOL",
-            "name": "aterm"
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "saterm"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "aterm"
+              }
+            ]
           }
         ]
       }
@@ -1989,8 +1998,8 @@
               "name": "uid"
             },
             {
-              "type": "STRING",
-              "value": "≔"
+              "type": "SYMBOL",
+              "name": "assign"
             },
             {
               "type": "SYMBOL",
@@ -2405,20 +2414,7 @@
       "value": "\\s"
     }
   ],
-  "conflicts": [
-    [
-      "term",
-      "saterm"
-    ],
-    [
-      "aterm",
-      "term_id"
-    ],
-    [
-      "param",
-      "uid"
-    ]
-  ],
+  "conflicts": [],
   "precedences": [],
   "externals": [],
   "inline": [],

@@ -1,5 +1,10 @@
 [
   {
+    "type": "arrow",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "assert_query",
     "named": true,
     "fields": {},
@@ -8,15 +13,28 @@
       "required": true,
       "types": [
         {
+          "type": "equiv",
+          "named": true
+        },
+        {
           "type": "param_list",
           "named": true
         },
         {
           "type": "term",
           "named": true
+        },
+        {
+          "type": "turnstile",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "assign",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "aterm",
@@ -93,7 +111,15 @@
           "named": true
         },
         {
+          "type": "lambda",
+          "named": true
+        },
+        {
           "type": "let_term",
+          "named": true
+        },
+        {
+          "type": "pi",
           "named": true
         },
         {
@@ -111,6 +137,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "assign",
+          "named": true
+        },
         {
           "type": "qid",
           "named": true
@@ -268,11 +298,20 @@
       "required": true,
       "types": [
         {
+          "type": "equiv",
+          "named": true
+        },
+        {
           "type": "term",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "equiv",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "explicit_term",
@@ -308,6 +347,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "hook_arrow",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "id_part",
@@ -379,6 +423,10 @@
       "required": true,
       "types": [
         {
+          "type": "assign",
+          "named": true
+        },
+        {
           "type": "constructor",
           "named": true
         },
@@ -398,6 +446,11 @@
     }
   },
   {
+    "type": "lambda",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "let_term",
     "named": true,
     "fields": {},
@@ -405,6 +458,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "assign",
+          "named": true
+        },
         {
           "type": "param_list",
           "named": true
@@ -597,6 +654,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "pi",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "print_query",
@@ -928,6 +990,10 @@
       "required": true,
       "types": [
         {
+          "type": "hook_arrow",
+          "named": true
+        },
+        {
           "type": "term",
           "named": true
         }
@@ -1077,6 +1143,10 @@
       "required": true,
       "types": [
         {
+          "type": "assign",
+          "named": true
+        },
+        {
           "type": "modifier",
           "named": true
         },
@@ -1111,6 +1181,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "assign",
+          "named": true
+        },
         {
           "type": "param",
           "named": true
@@ -1154,6 +1228,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "arrow",
+          "named": true
+        },
         {
           "type": "bterm",
           "named": true
@@ -1208,6 +1286,11 @@
     }
   },
   {
+    "type": "turnstile",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "type_query",
     "named": true,
     "fields": {},
@@ -1247,6 +1330,10 @@
       "types": [
         {
           "type": "equation",
+          "named": true
+        },
+        {
+          "type": "hook_arrow",
           "named": true
         }
       ]
@@ -1322,6 +1409,10 @@
     "named": false
   },
   {
+    "type": "->",
+    "named": false
+  },
+  {
     "type": ".",
     "named": false
   },
@@ -1342,7 +1433,15 @@
     "named": false
   },
   {
+    "type": ":=",
+    "named": false
+  },
+  {
     "type": ";",
+    "named": false
+  },
+  {
+    "type": "==",
     "named": false
   },
   {
@@ -1359,6 +1458,10 @@
   },
   {
     "type": "[",
+    "named": false
+  },
+  {
+    "type": "\\",
     "named": false
   },
   {
@@ -1456,6 +1559,10 @@
   {
     "type": "float",
     "named": true
+  },
+  {
+    "type": "forall",
+    "named": false
   },
   {
     "type": "generalize",
@@ -1655,6 +1762,14 @@
   },
   {
     "type": "|",
+    "named": false
+  },
+  {
+    "type": "|-",
+    "named": false
+  },
+  {
+    "type": "|->",
     "named": false
   },
   {
