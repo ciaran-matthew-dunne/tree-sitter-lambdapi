@@ -1,70 +1,176 @@
-; highlights.scm — Tree-sitter highlight queries for LambdaPi
+; Tree-sitter highlighting queries for LambdaPi
 
-;; Capture comments, strings, and numbers
-[(comment)     @comment]
-[(string)      @string]
-[(integer)     @constant.numeric]
+; Comments
+(comment) @comment
 
-;; Identifiers and qualified identifiers
-[(uid)         @variable]
-[(qid)         @variable]
-[(term_id)     @function]
+; Keywords and control structures
+"require" @keyword.import
+"open" @keyword.import
+"as" @keyword.import
+"opaque" @keyword
+"symbol" @keyword.function
+"inductive" @keyword.type
+"with" @keyword
+"rule" @keyword
+"builtin" @keyword
+"coerce_rule" @keyword
+"unif_rule" @keyword
+"notation" @keyword
 
-;; Keywords and language constructs
-[
-  ; Core keywords
-  \"let\"       @keyword
-  \"in\"        @keyword
-  \"λ\"         @keyword
-  \"Π\"         @keyword
+; Type-related keywords
+"TYPE" @type.builtin
 
-  ; Proof delimiters
-  \"begin\"     @keyword
-  \"abort\"     @keyword
-  \"admitted\"  @keyword
-  \"end\"       @keyword
+; Lambda calculus and type theory constructs
+"λ" @keyword.function
+"Π" @keyword.operator
+"let" @keyword
+"in" @keyword
 
-  ; Commands
-  \"opaque\"    @keyword
-  \"require\"   @keyword
-  \"open\"      @keyword
-  \"symbol\"    @keyword
-  \"inductive\" @keyword
-  \"rule\"      @keyword
-  \"builtin\"   @keyword
-  \"coerce_rule\" @keyword
-  \"unif_rule\" @keyword
-  \"notation\"  @keyword
+; Proof keywords
+"begin" @keyword
+"end" @keyword
+"abort" @keyword
+"admitted" @keyword
 
-  ; Modifiers and switches
-  (switch)     @keyword
-  (side)       @keyword
-  (assert)     @keyword
-  (exposition) @keyword
-  (modifier)   @keyword
+; Tactic keywords
+"admit" @keyword
+"apply" @keyword
+"assume" @keyword
+"eval" @keyword
+"fail" @keyword
+"generalize" @keyword
+"have" @keyword
+"induction" @keyword
+"orelse" @keyword
+"refine" @keyword
+"reflexivity" @keyword
+"remove" @keyword
+"repeat" @keyword
+"rewrite" @keyword
+"set" @keyword
+"simplify" @keyword
+"solve" @keyword
+"symmetry" @keyword
+"try" @keyword
+"why3" @keyword
+"debug" @keyword
 
-  ; Tactics and queries
-  (tactic)     @keyword
-  (query)      @keyword
-]
+; Query keywords
+"assert" @keyword
+"assertnot" @keyword
+"compute" @keyword
+"print" @keyword
+"proofterm" @keyword
+"flag" @keyword
+"prover" @keyword
+"prover_timeout" @keyword
+"verbose" @keyword
+"type" @keyword
+"search" @keyword
 
-;; Operators
-[
-  \"→\" @operator
-  \"↪\" @operator
-  \"≔\" @operator
-  \"≡\" @operator
-  \"⊢\" @operator
-]
+; Modifiers
+"left" @attribute
+"right" @attribute
+"associative" @attribute
+"commutative" @attribute
+"constant" @attribute
+"injective" @attribute
+"opaque" @attribute
+"sequential" @attribute
+"private" @attribute
+"protected" @attribute
 
-;; Punctuation
-[
-  \"(\"  @punctuation.bracket
-  \")\"  @punctuation.bracket
-  \"[\"  @punctuation.bracket
-  \"]\"  @punctuation.bracket
-  \"{\"  @punctuation.bracket
-  \"}\"  @punctuation.bracket
-  \",\"  @punctuation.delimiter
-  \";\"  @punctuation.delimiter
-]
+; Notation types
+"infix" @keyword
+"postfix" @keyword
+"prefix" @keyword
+"quantifier" @keyword
+
+; Switches
+"on" @constant.builtin
+"off" @constant.builtin
+
+; Operators and symbols
+":" @punctuation.delimiter
+"≔" @operator
+"→" @operator
+"↪" @operator
+"≡" @operator
+"⊢" @operator
+"|" @punctuation.delimiter
+";" @punctuation.delimiter
+"," @punctuation.delimiter
+"." @punctuation.delimiter
+"`" @punctuation.special
+
+; Brackets and delimiters
+"(" @punctuation.bracket
+")" @punctuation.bracket
+"[" @punctuation.bracket
+"]" @punctuation.bracket
+"{" @punctuation.bracket
+"}" @punctuation.bracket
+"{|" @punctuation.bracket
+"|}" @punctuation.bracket
+
+; Identifiers
+(uid) @variable
+(param) @variable.parameter
+(esc_uid) @variable
+
+; Qualified identifiers
+(qid) @variable
+(qid_expl) @variable.special
+"@" @punctuation.special
+
+; Term identifiers in specific contexts
+(term_id) @variable
+
+; Constructor names
+(constructor (uid) @constructor)
+
+; Inductive type names
+(inductive (uid) @type)
+
+; Symbol declarations
+((symbol (uid) @function.definition))
+
+; Parameters in specific contexts
+(param_list (param) @variable.parameter)
+
+; Wildcard
+"_" @variable.special
+
+; Meta-variables
+(aterm "$" @punctuation.special (uid) @variable.special)
+(aterm "?" @punctuation.special (uid) @variable.special)
+
+; Literals
+(integer) @number
+(string) @string
+(float_or_int) @number
+
+; Path components
+(path) @namespace
+
+; Module names in require statements
+((require (path) @module))
+((require (uid) @module))
+
+; Escaped identifiers
+(esc_uid "{|" @punctuation.bracket (uid) @variable "|}" @punctuation.bracket)
+
+; Special highlighting for rule patterns
+(rw_patt "in" @keyword)
+(rw_patt "as" @keyword)
+
+; Environment brackets
+(env "." @punctuation.delimiter "[" @punctuation.bracket "]" @punctuation.bracket)
+
+; Proof environment
+(proof) @keyword
+(subproof "{" @punctuation.bracket "}" @punctuation.bracket)
+(proof_end) @keyword
+
+; Error nodes
+(ERROR) @error
